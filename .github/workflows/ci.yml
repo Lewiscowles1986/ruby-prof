@@ -27,4 +27,4 @@ jobs:
     - name: Build
       run: bundle exec rake clean compile
     - name: Test
-      run: bundle exec rake clean test
+      run: bundle exec rake clean compile test
