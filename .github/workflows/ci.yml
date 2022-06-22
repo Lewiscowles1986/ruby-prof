@@ -1,0 +1,42 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        ruby: ['2.4', '2.5', '2.6', '2.7']
+        experimental: [false]
+        include:
+          - ruby: '3'
+            os: ubuntu-latest
+            experimental: true
+          - ruby: '3.1'
+            os: ubuntu-latest
+            experimental: true
+
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+    name: Tests Ruby ${{ matrix.ruby }} - ${{ matrix.os }}, Experimental ${{ matrix.experimental }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    - name: Build
+      run: bundle exec rake clean compile
+    - name: Test
+      run: bundle exec rake clean compile test
