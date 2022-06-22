@@ -27,6 +27,7 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.experimental }}
+    name: Tests Ruby ${{ matrix.ruby }} - ${{ matrix.os }}, Experimental ${{ matrix.experimental }}
 
     steps:
     - uses: actions/checkout@v2
